@@ -85,6 +85,26 @@ button.danger{background:#fee4e2;color:#b42318}
   position:absolute;right:10px;bottom:10px;font-size:8.5px;color:#6b7280;
   background:rgba(255,255,255,.84);padding:4px 6px;border-radius:5px
 }
+.latex-overlay{
+  position:absolute;left:10px;top:72px;width:250px;
+  background:rgba(255,255,255,.95);border:1px solid var(--line);
+  border-radius:7px;padding:7px;z-index:2;font-size:9.5px;
+  box-shadow:0 2px 8px rgba(0,0,0,.05)
+}
+.latex-overlay summary{
+  cursor:pointer;font-size:10px;font-weight:800;list-style:none
+}
+.latex-overlay summary::-webkit-details-marker{display:none}
+.latex-content{
+  margin-top:5px;font-size:9px;line-height:1.5;color:#596575
+}
+.latex-content code{
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  background:#f0f2f5;padding:1px 3px;border-radius:3px;color:#27313d
+}
+.latex-tip{
+  margin-top:4px;padding-top:4px;border-top:1px solid #edf0f3
+}
 .results{
   height:225px;background:#fff;border-top:1px solid var(--line);
   padding:9px;overflow:hidden
@@ -175,21 +195,6 @@ details summary{cursor:pointer;font-size:10.5px;font-weight:800}
     <div id="systemStatus" class="status"></div>
   </section>
 
-  <section class="card">
-    <details open>
-      <summary>LaTeX 기본 문법</summary>
-      <div class="syntax">
-        <div><code>x^2</code> → x²</div>
-        <div><code>x_1</code> → 아래첨자</div>
-        <div><code>\frac{a}{b}</code> → 분수</div>
-        <div><code>\sqrt{x}</code> → 제곱근</div>
-        <div><code>\begin{pmatrix} a & b \\ c & d \end{pmatrix}</code> → 행렬</div>
-        <div><code>\pi</code> → pi</div>
-        <div style="margin-top:6px"><b>입력창에는 특수문자 대신 키보드 문자를 쓰면 돼.</b></div>
-        <div><code>Rz(pi/2)</code>, <code>A2^T</code>, <code>[1,0,0;0,1,0;0,0,1]</code></div>
-      </div>
-    </details>
-  </section>
 </aside>
 
 <main class="main">
@@ -200,6 +205,18 @@ details summary{cursor:pointer;font-size:10.5px;font-weight:800}
       드래그: 회전 · 휠: 확대/축소<br>
       파랑: 원본 · 빨강: 변환 결과
     </div>
+    <details class="latex-overlay">
+      <summary>LaTeX 기본 문법</summary>
+      <div class="latex-content">
+        <div><code>x^2</code> → 위첨자</div>
+        <div><code>x_1</code> → 아래첨자</div>
+        <div><code>\frac{a}{b}</code> → 분수</div>
+        <div><code>\sqrt{x}</code> → 제곱근</div>
+        <div><code>\begin{pmatrix} a & b \\ c & d \end{pmatrix}</code> → 행렬</div>
+        <div><code>\pi</code> → pi</div>
+        <div class="latex-tip"><b>프로그램 입력:</b> 특수문자 대신 <code>Rz(pi/2)</code>, <code>A2^T</code>처럼 키보드 문자로 입력</div>
+      </div>
+    </details>
     <div class="canvas-note">Canvas 기반 3D 투영</div>
   </div>
   <div class="results">
