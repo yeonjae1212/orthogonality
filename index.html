@@ -10,54 +10,112 @@
   --muted:#687385;--accent:#315efb;--danger:#c62828;--ok:#18794e;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
-header{padding:20px 26px;background:#fff;border-bottom:1px solid var(--line)}
-header h1{margin:0 0 5px;font-size:23px}
-header p{margin:0;color:var(--muted);font-size:13px}
-.app{display:grid;grid-template-columns:minmax(420px,520px) 1fr;min-height:calc(100vh - 83px)}
-.sidebar{padding:18px;overflow:auto;border-right:1px solid var(--line)}
-.main{display:flex;flex-direction:column;min-width:0}
-.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px;margin-bottom:13px}
-.card h2{font-size:15px;margin:0 0 11px}
-.row{display:flex;gap:9px}.row>*{flex:1}
-label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}
-input,textarea,select{width:100%;border:1px solid #cfd5dd;border-radius:8px;padding:8px 9px;font:inherit;background:#fff;color:var(--text)}
-textarea{min-height:92px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
-button{border:0;border-radius:8px;padding:8px 11px;font:inherit;font-weight:700;cursor:pointer;background:#e9edf3;color:var(--text)}
-button.primary{background:var(--accent);color:white}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
+header{
+  height:68px;padding:14px 22px;background:#fff;border-bottom:1px solid var(--line);
+  display:flex;flex-direction:column;justify-content:center
+}
+header h1{margin:0 0 3px;font-size:20px;line-height:1.2}
+header p{margin:0;color:var(--muted);font-size:11px}
+.app{
+  height:calc(100vh - 68px);
+  display:grid;
+  grid-template-columns:minmax(390px,440px) minmax(0,1fr);
+  overflow:hidden
+}
+.sidebar{
+  min-width:0;height:100%;padding:12px 14px;
+  overflow:hidden;border-right:1px solid var(--line);
+  display:flex;flex-direction:column;gap:8px
+}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:9px;
+  padding:11px 12px;margin:0;flex:none
+}
+.card h2{font-size:13px;margin:0 0 8px}
+.row{display:flex;gap:7px}.row>*{flex:1;min-width:0}
+label{display:block;font-size:10px;font-weight:700;margin-bottom:3px}
+input,textarea,select{
+  width:100%;border:1px solid #cfd5dd;border-radius:6px;padding:6px 7px;
+  font:inherit;background:#fff;color:var(--text);font-size:11px
+}
+textarea{
+  min-height:54px;max-height:72px;resize:none;
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace
+}
+button{
+  border:0;border-radius:6px;padding:6px 9px;font:inherit;
+  font-size:11px;font-weight:700;cursor:pointer;background:#e9edf3;color:var(--text)
+}
+button.primary{background:var(--accent);color:#fff}
 button.danger{background:#fee4e2;color:#b42318}
-.small{font-size:11px;padding:5px 8px}
-.help{font-size:11px;line-height:1.55;color:var(--muted)}
-.help code,.syntax code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#f0f2f5;padding:2px 4px;border-radius:4px}
-.error{margin-top:8px;padding:8px;border-radius:8px;background:#fff0f0;color:var(--danger);font-size:12px;white-space:pre-wrap}
+.small{font-size:10px;padding:4px 7px}
+.help{font-size:9.5px;line-height:1.45;color:var(--muted)}
+.help code,.syntax code{
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  background:#f0f2f5;padding:1px 3px;border-radius:3px
+}
+.error{
+  margin-top:6px;padding:6px;border-radius:6px;background:#fff0f0;
+  color:var(--danger);font-size:10px;white-space:pre-wrap
+}
 .ok{color:var(--ok)}
-.status{margin-top:8px;font-size:11px;color:var(--muted)}
-.transform{border:1px solid var(--line);background:#fafbfc;border-radius:10px;padding:11px;margin-bottom:9px}
-.transform-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
-.transform-title{font-weight:800}
-.preview{font-size:11px;margin-top:6px}
-#viewport{position:relative;flex:1;min-height:510px;background:#edf0f4;overflow:hidden}
+.status{margin-top:6px;font-size:9.5px;color:var(--muted);line-height:1.4}
+.transform{
+  border:1px solid var(--line);background:#fafbfc;border-radius:7px;
+  padding:7px;margin-bottom:5px
+}
+.transform-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.transform-title{font-weight:800;font-size:11px}
+.preview{font-size:9.5px;margin-top:4px}
+#transforms{max-height:190px;overflow:auto;padding-right:2px;margin-top:6px}
+#targetInputs{margin-top:7px}
+#viewport{
+  position:relative;min-width:0;min-height:0;height:calc(100% - 225px);
+  background:#edf0f4;overflow:hidden
+}
 #canvas{display:block;width:100%;height:100%}
-.legend{position:absolute;left:12px;top:12px;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:9px;padding:9px;font-size:11px;z-index:2}
-.legend b{font-size:12px}
-.results{background:#fff;border-top:1px solid var(--line);padding:12px;max-height:330px;overflow:auto}
-.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.result-box{border:1px solid var(--line);border-radius:9px;padding:9px;font-size:12px;line-height:1.55}
-.result-box pre{white-space:pre-wrap;font:11px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;margin:6px 0 0}
-.matrix-wrap{display:flex;align-items:center;gap:5px;margin-top:8px}
-.matrix-bracket{font-family:Georgia,serif;font-size:42px;line-height:1;font-weight:400;color:#333}
-.matrix-table{border-collapse:collapse;font-family:"Times New Roman",Georgia,serif;font-size:17px}
-.matrix-table td{padding:2px 9px;text-align:center;min-width:26px}
-.matrix-caption{font-size:11px;color:var(--muted);margin-top:4px}
+.legend{
+  position:absolute;left:10px;top:10px;background:rgba(255,255,255,.94);
+  border:1px solid var(--line);border-radius:7px;padding:7px;font-size:9.5px;z-index:2
+}
+.legend b{font-size:10.5px}
+.canvas-note{
+  position:absolute;right:10px;bottom:10px;font-size:8.5px;color:#6b7280;
+  background:rgba(255,255,255,.84);padding:4px 6px;border-radius:5px
+}
+.results{
+  height:225px;background:#fff;border-top:1px solid var(--line);
+  padding:9px;overflow:hidden
+}
+.result-grid{
+  height:100%;display:grid;grid-template-columns:1.15fr 1fr;
+  grid-template-rows:1fr 1fr;gap:7px
+}
+.result-box{
+  border:1px solid var(--line);border-radius:7px;padding:7px;
+  font-size:10px;line-height:1.4;min-width:0;overflow:auto
+}
+.result-box pre{
+  white-space:pre-wrap;font:9px/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;margin:4px 0 0
+}
+.matrix-wrap{display:flex;align-items:center;gap:3px;margin-top:4px}
+.matrix-bracket{font-family:Georgia,serif;font-size:30px;line-height:1;color:#333}
+.matrix-table{border-collapse:collapse;font-family:"Times New Roman",Georgia,serif;font-size:13px}
+.matrix-table td{padding:1px 5px;text-align:center;min-width:20px}
+.matrix-caption{font-size:8.5px;color:var(--muted);margin-top:2px}
+details{font-size:10px}
+details summary{cursor:pointer;font-size:10.5px;font-weight:800}
+.syntax{font-size:9.5px;line-height:1.45;margin-top:5px}
+.card.compact-execute{padding-bottom:9px}
 
-details summary{cursor:pointer;font-size:12px;font-weight:800}
-.syntax{font-size:11px;line-height:1.7;margin-top:8px}
-.canvas-note{position:absolute;right:12px;bottom:12px;font-size:10px;color:#6b7280;background:rgba(255,255,255,.85);padding:5px 7px;border-radius:6px}
 @media(max-width:900px){
-  .app{grid-template-columns:1fr}
-  .sidebar{border-right:0}
-  .main{min-height:700px}
-  .result-grid{grid-template-columns:1fr}
+  html,body{overflow:auto}
+  .app{height:auto;grid-template-columns:1fr}
+  .sidebar{height:auto;overflow:visible}
+  #viewport{height:500px}
+  .results{height:auto;min-height:260px}
 }
 </style>
 </head>
@@ -88,8 +146,8 @@ details summary{cursor:pointer;font-size:12px;font-weight:800}
         </select>
       </div>
     </div>
-    <div id="targetInputs" style="margin-top:9px"></div>
-    <div class="help" style="margin-top:7px">
+    <div id="targetInputs" style="margin-top:5px"></div>
+    <div class="help" style="margin-top:4px">
       범위는 <code>-2..2</code>. 수식은 <code>^</code>, <code>sin()</code>, <code>cos()</code>, <code>sqrt()</code>, <code>pi</code> 등을 사용할 수 있어.
     </div>
     <div id="targetError"></div>
@@ -98,9 +156,9 @@ details summary{cursor:pointer;font-size:12px;font-weight:800}
   <section class="card">
     <h2>2. 변환 행렬</h2>
     <div class="help">입력 순서가 A1, A2, A3이면 적용 순서는 <code>A3 * A2 * A1 * v</code>.</div>
-    <div id="transforms" style="margin-top:9px"></div>
+    <div id="transforms"></div>
     <button class="primary" id="addTransform">+ 변환 추가</button>
-    <div class="help" style="margin-top:7px">
+    <div class="help" style="margin-top:4px">
       행렬: <code>[1,0;0,1]</code><br>
       3D 회전: <code>Rx(pi/2)</code>, <code>Ry(pi/2)</code>, <code>Rz(pi/2)</code><br>
       참조/전치: <code>A1</code>, <code>A2^T</code>, <code>transpose(A2)</code>
@@ -164,7 +222,7 @@ let transformCount = 0;
 const view = {
   yaw: -0.75,
   pitch: 0.48,
-  zoom: 65,
+  zoom: 58,
   dragging: false,
   lastX: 0,
   lastY: 0
@@ -539,11 +597,11 @@ function targetUI(){
   }else if(type==="curve"){
     box.innerHTML=`<div class="row">${["x","y","z"].slice(0,d).map((a,i)=>`
       <div><label>${a}(t)</label><input id="c_${a}" value="${i===0?"t":i===1?"t^2":"0"}"></div>`).join("")}</div>
-      <div style="margin-top:8px"><label>t 범위</label><input id="range_t" value="-2..2"></div>`;
+      <div style="margin-top:5px"><label>t 범위</label><input id="range_t" value="-2..2"></div>`;
   }else{
     box.innerHTML=`<div class="row">${["x","y","z"].slice(0,d).map((a,i)=>`
       <div><label>${a}(u,v)</label><input id="s_${a}" value="${i===0?"u":i===1?"v":"0"}"></div>`).join("")}</div>
-      <div class="row" style="margin-top:8px">
+      <div class="row" style="margin-top:5px">
         <div><label>u 범위</label><input id="range_u" value="-2..2"></div>
         <div><label>v 범위</label><input id="range_v" value="-2..2"></div>
       </div>`;
