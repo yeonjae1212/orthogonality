@@ -1,1 +1,40 @@
-/* 현재 버전의 스타일은 index.html에 포함되어 있습니다. 이후 유지보수가 필요하면 이 파일로 분리할 수 있습니다. */
+:root{
+  --bg:#f5f6f8;--card:#fff;--line:#dfe3e8;--text:#18202a;
+  --muted:#697586;--accent:#315efb;--danger:#c62828;--ok:#18794e
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans KR",system-ui,sans-serif}
+header{padding:22px 28px;background:#fff;border-bottom:1px solid var(--line)}
+header h1{margin:0 0 5px;font-size:24px}
+header p{margin:0;color:var(--muted);font-size:14px}
+.app{display:grid;grid-template-columns:minmax(430px,520px) 1fr;min-height:calc(100vh - 89px)}
+.sidebar{padding:20px;overflow:auto;border-right:1px solid var(--line)}
+.main{min-width:0;display:flex;flex-direction:column}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.card h2{font-size:16px;margin:0 0 13px}
+.row{display:flex;gap:9px;align-items:center}.row>*{flex:1}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+input,textarea,select{width:100%;border:1px solid #cfd5dd;border-radius:8px;padding:9px 10px;font:inherit;background:#fff;color:var(--text)}
+textarea{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;resize:vertical;min-height:92px}
+button{border:0;border-radius:8px;padding:9px 12px;font:inherit;font-weight:600;cursor:pointer;background:#e9edf3;color:var(--text)}
+button.primary{background:var(--accent);color:#fff}.danger{color:#b42318;background:#fee4e2}.small{font-size:12px;padding:6px 9px}
+.help{color:var(--muted);font-size:12px;line-height:1.55}.formula-help{margin-top:8px}
+.error{margin-top:9px;padding:9px;border-radius:8px;background:#fff0f0;color:var(--danger);font-size:12px;white-space:pre-wrap}
+.success{color:var(--ok)}
+.status{margin-top:9px;font-size:12px;line-height:1.5}
+.transform{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;background:#fafbfc}
+.transform-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.transform-title{font-weight:700}
+.preview{margin-top:6px;font-size:12px}
+#viewport{position:relative;flex:1;min-height:520px;background:#eef1f5}
+.legend{position:absolute;left:14px;top:14px;background:rgba(255,255,255,.92);border:1px solid var(--line);padding:10px;border-radius:9px;font-size:12px;z-index:2}
+.results{padding:14px;background:#fff;border-top:1px solid var(--line);max-height:330px;overflow:auto}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.result-box{border:1px solid var(--line);border-radius:9px;padding:10px;font-size:13px}
+.result-box pre{white-space:pre-wrap;margin:7px 0 0;font-family:ui-monospace,monospace;font-size:12px}
+details summary{cursor:pointer;font-weight:700;font-size:13px}
+.syntax{font-size:12px;line-height:1.65;margin-top:10px}
+.syntax code,.help code{background:#f0f2f5;padding:2px 4px;border-radius:4px;font-family:ui-monospace,monospace}
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}.sidebar{border-right:0}.main{min-height:650px}.result-grid{grid-template-columns:1fr}
+}

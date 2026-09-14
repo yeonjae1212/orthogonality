@@ -7,82 +7,98 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/mathjs@14.0.1/lib/browser/math.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css">
-<style>
-:root{--bg:#f5f6f8;--card:#fff;--line:#dfe3e8;--text:#18202a;--muted:#697586;--accent:#315efb;--danger:#c62828;--ok:#18794e}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans KR",system-ui,sans-serif}
-header{padding:22px 28px;background:#fff;border-bottom:1px solid var(--line)}header h1{margin:0 0 5px;font-size:24px}header p{margin:0;color:var(--muted);font-size:14px}
-.app{display:grid;grid-template-columns:minmax(430px,520px) 1fr;min-height:calc(100vh - 89px)}
-.sidebar{padding:20px;overflow:auto;border-right:1px solid var(--line)}
-.main{min-width:0;display:flex;flex-direction:column}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
-.card h2{font-size:16px;margin:0 0 13px}.row{display:flex;gap:9px;align-items:center}.row>*{flex:1}
-label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
-input,textarea,select{width:100%;border:1px solid #cfd5dd;border-radius:8px;padding:9px 10px;font:inherit;background:#fff;color:var(--text)}
-textarea{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;resize:vertical;min-height:92px}
-button{border:0;border-radius:8px;padding:9px 12px;font:inherit;font-weight:600;cursor:pointer;background:#e9edf3;color:var(--text)}
-button.primary{background:var(--accent);color:#fff}.danger{color:#b42318;background:#fee4e2}.small{font-size:12px;padding:6px 9px}
-.help{color:var(--muted);font-size:12px;line-height:1.55}.error{margin-top:9px;padding:9px;border-radius:8px;background:#fff0f0;color:var(--danger);font-size:12px;white-space:pre-wrap}.success{color:var(--ok)}
-.transform{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;background:#fafbfc}.transform-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.transform-title{font-weight:700}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.chip{background:#eef2ff;color:#3047a3;border-radius:99px;padding:3px 8px;font-size:11px}
-#viewport{position:relative;flex:1;min-height:520px;background:#eef1f5}.legend{position:absolute;left:14px;top:14px;background:rgba(255,255,255,.92);border:1px solid var(--line);padding:10px;border-radius:9px;font-size:12px;z-index:2}
-.results{padding:14px;background:#fff;border-top:1px solid var(--line);max-height:330px;overflow:auto}.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.result-box{border:1px solid var(--line);border-radius:9px;padding:10px;font-size:13px}.result-box pre{white-space:pre-wrap;margin:7px 0 0;font-family:ui-monospace,monospace}
-details summary{cursor:pointer;font-weight:700;font-size:13px}.syntax{font-size:12px;line-height:1.65}.syntax code{background:#f0f2f5;padding:2px 4px;border-radius:4px;font-family:ui-monospace,monospace}
-.katex-display{margin:.4em 0}
-@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{border-right:0}.main{min-height:650px}.result-grid{grid-template-columns:1fr}}
-</style>
+<script type="module" src="script.js"></script>
 </head>
 <body>
-<header><h1>Orthogonal Transformation Lab</h1><p>2D / 3D 벡터·곡선·평면을 행렬로 변환하고, 직교행렬의 성질을 실험하는 도구</p></header>
+<header>
+  <h1>Orthogonal Transformation Lab</h1>
+  <p>2D / 3D 벡터·곡선·평면을 행렬로 변환하고, 직교행렬의 성질을 실험하는 도구</p>
+</header>
+
 <div class="app">
 <aside class="sidebar">
   <section class="card">
     <h2>1. 변환 대상</h2>
     <div class="row">
-      <div><label>대상 종류</label><select id="targetType"><option value="point">점 / 벡터 하나</option><option value="curve">매개변수 곡선</option><option value="surface">매개변수 평면</option></select></div>
-      <div><label>차원</label><select id="dimension"><option value="3">3D</option><option value="2">2D</option></select></div>
+      <div>
+        <label for="targetType">대상 종류</label>
+        <select id="targetType">
+          <option value="point">점 / 벡터 하나</option>
+          <option value="curve">매개변수 곡선</option>
+          <option value="surface">매개변수 평면</option>
+        </select>
+      </div>
+      <div>
+        <label for="dimension">차원</label>
+        <select id="dimension"><option value="3">3D</option><option value="2">2D</option></select>
+      </div>
     </div>
     <div id="targetInputs" style="margin-top:10px"></div>
-    <div class="help" style="margin-top:8px">입력은 키보드 문자만 사용하세요. 예: <code>x=t</code>, <code>y=t^2</code>, <code>z=0</code>, 범위는 <code>t=-2..2</code>.</div>
+    <div class="help">
+      범위는 <code>-2..2</code> 형식으로 입력해.
+      수식에서는 <code>^</code>, <code>sin()</code>, <code>cos()</code>, <code>sqrt()</code>, <code>pi</code> 등을 사용할 수 있어.
+    </div>
     <div id="targetError"></div>
   </section>
 
   <section class="card">
     <h2>2. 변환 행렬</h2>
-    <div class="help">입력 순서가 A1, A2, A3이면 실제 적용은 A3 * A2 * A1 * v 입니다.</div>
+    <div class="help">
+      입력 순서가 A1, A2, A3이면 실제 적용은
+      <code>A3 * A2 * A1 * v</code>야.
+    </div>
     <div id="transforms"></div>
     <button class="primary" id="addTransform">+ 변환 추가</button>
+    <div class="help formula-help">
+      예: <code>[0,-1,0;1,0,0;0,0,1]</code>,
+      <code>Rz(pi/2)</code>,
+      <code>A2^T</code>,
+      <code>transpose(A2)</code>,
+      <code>A1*A2</code>
+    </div>
     <div id="transformError"></div>
   </section>
 
   <section class="card">
     <h2>3. 실행</h2>
-    <div class="row"><button class="primary" id="run">변환 실행</button><button id="reset">초기화</button></div>
-    <div class="help" style="margin-top:9px">변환식은 일반적인 키보드 입력으로 작성할 수 있습니다. LaTeX 모양으로 표시되는 행렬은 결과 확인용입니다.</div>
+    <div class="row">
+      <button class="primary" id="run">변환 실행</button>
+      <button id="reset">초기화</button>
+    </div>
+    <div id="systemStatus" class="status"></div>
   </section>
 
   <section class="card">
     <details open>
       <summary>LaTeX 기본 문법</summary>
-      <div class="syntax" style="margin-top:10px">
-        <div><code>x^2</code> → 위첨자: \(x^2\)</div>
-        <div><code>x_1</code> → 아래첨자: \(x_1\)</div>
-        <div><code>\frac{a}{b}</code> → 분수: \(a/b\)</div>
-        <div><code>\sqrt{x}</code> → 제곱근: \(\sqrt{x}\)</div>
+      <div class="syntax">
+        <div><code>x^2</code> → 위첨자</div>
+        <div><code>x_1</code> → 아래첨자</div>
+        <div><code>\frac{a}{b}</code> → 분수</div>
+        <div><code>\sqrt{x}</code> → 제곱근</div>
         <div><code>\begin{pmatrix} a & b \\ c & d \end{pmatrix}</code> → 행렬</div>
-        <div><code>\pi</code> → pi, <code>\theta</code> → theta</div>
-        <div style="margin-top:6px"><b>중요:</b> 프로그램 입력창에서는 LaTeX의 특수기호를 직접 입력하지 않아도 됩니다. 예를 들어 <code>Rz(pi/2)</code>, <code>A2^T</code>, <code>[1,0,0;0,1,0;0,0,1]</code>처럼 키보드 문자로 입력하세요.</div>
+        <div><code>\pi</code> → pi</div>
+        <div style="margin-top:7px">
+          <b>프로그램 입력창에서는 특수기호를 직접 입력할 필요가 없어.</b><br>
+          예를 들어 <code>Rz(pi/2)</code>, <code>A2^T</code>,
+          <code>[1,0,0;0,1,0;0,0,1]</code>처럼 입력하면 돼.
+        </div>
       </div>
     </details>
   </section>
 </aside>
 
 <main class="main">
-  <div id="viewport"><div class="legend"><b>3D View</b><br>마우스 드래그: 회전 · 휠: 확대/축소<br><span id="viewInfo">원본과 변환 결과를 표시합니다.</span></div></div>
+  <div id="viewport">
+    <div class="legend">
+      <b>3D View</b><br>
+      마우스 드래그: 회전 · 휠: 확대/축소<br>
+      <span id="viewInfo">원본과 변환 결과를 표시합니다.</span>
+    </div>
+  </div>
+
   <div class="results">
     <div class="result-grid">
       <div class="result-box"><b>합성 변환</b><div id="composite">실행 전</div></div>
@@ -93,207 +109,5 @@ details summary{cursor:pointer;font-weight:700;font-size:13px}.syntax{font-size:
   </div>
 </main>
 </div>
-
-<script>
-const $=id=>document.getElementById(id);
-let transformCount=0;
-let scene,camera,renderer,controls,objectGroup,gridHelper;
-
-function init3D(){
-  const el=$("viewport");
-  scene=new THREE.Scene();
-  scene.background=new THREE.Color(0xf0f2f5);
-  camera=new THREE.PerspectiveCamera(45,1,.01,1000);
-  camera.position.set(6,5,7);
-  renderer=new THREE.WebGLRenderer({antialias:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2)); el.appendChild(renderer.domElement);
-  controls=new THREE.OrbitControls(camera,renderer.domElement);
-  controls.enableDamping=true;
-  const amb=new THREE.AmbientLight(0xffffff,.8);scene.add(amb);
-  const light=new THREE.DirectionalLight(0xffffff,.7);light.position.set(5,8,5);scene.add(light);
-  addAxes();
-  objectGroup=new THREE.Group();scene.add(objectGroup);
-  resize();
-  animate();
-}
-function addAxes(){
-  const axes=new THREE.AxesHelper(3);scene.add(axes);
-  gridHelper=new THREE.GridHelper(6,12);scene.add(gridHelper);
-}
-function resize(){
-  const el=$("viewport");const w=el.clientWidth,h=el.clientHeight;
-  renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();
-}
-window.addEventListener("resize",resize);
-function animate(){requestAnimationFrame(animate);controls.update();renderer.render(scene,camera)}
-
-function targetUI(){
- const type=$("targetType").value, d=+$("dimension").value, box=$("targetInputs");
- if(type==="point"){
-   box.innerHTML=`<div class="row">${["x","y","z"].slice(0,d).map(a=>`<div><label>${a}</label><input id="p_${a}" value="${a==="x"?"1":a==="y"?"2":"3"}"></div>`).join("")}</div>`;
- }else if(type==="curve"){
-   box.innerHTML=`<div class="row">${["x","y","z"].slice(0,d).map((a,i)=>`<div><label>${a}(t)</label><input id="c_${a}" value="${i===0?"t":i===1?"t^2":"0"}"></div>`).join("")}</div><div style="margin-top:8px"><label>t 범위</label><input id="range_t" value="-2..2"></div>`;
- }else{
-   box.innerHTML=`<div class="row">${["x","y","z"].slice(0,d).map((a,i)=>`<div><label>${a}(u,v)</label><input id="s_${a}" value="${i===0?"u":i===1?"v":"0"}"></div>`).join("")}</div><div class="row" style="margin-top:8px"><div><label>u 범위</label><input id="range_u" value="-2..2"></div><div><label>v 범위</label><input id="range_v" value="-2..2"></div></div>`;
- }
-}
-$("targetType").onchange=targetUI;$("dimension").onchange=targetUI;targetUI();
-
-function addTransform(expr=""){
- transformCount++;
- const n=transformCount;
- const div=document.createElement("div");div.className="transform";div.dataset.n=n;
- div.innerHTML=`<div class="transform-head"><span class="transform-title">A${n}</span><button class="small danger remove">삭제</button></div>
- <label>행렬 또는 행렬식</label>
- <textarea class="texpr" placeholder="예: Rz(pi/2)&#10;또는 [0,-1,0;1,0,0;0,0,1]&#10;또는 A2^T">${expr}</textarea>
- <div class="help">사용 가능 예: <code>[1,2;3,4]</code>, <code>Rz(pi/2)</code>, <code>transpose(A2)</code>, <code>A2^T</code>, <code>A1*A2</code></div>
- <div class="preview"></div>`;
- div.querySelector(".remove").onclick=()=>{div.remove();renumber();};
- div.querySelector(".texpr").addEventListener("input",previewTransforms);
- $("transforms").appendChild(div);previewTransforms();
-}
-function renumber(){
- [...document.querySelectorAll(".transform")].forEach((x,i)=>x.querySelector(".transform-title").textContent="A"+(i+1));
- transformCount=document.querySelectorAll(".transform").length;previewTransforms();
-}
-$("addTransform").onclick=()=>addTransform();
-addTransform("[0,-1,0;1,0,0;0,0,1]");
-
-function normalizeExpr(s){
- s=s.trim();
- // Human-friendly aliases.
- s=s.replace(/([A-Za-z]\w*)\s*\^T\b/g,"transpose($1)");
- s=s.replace(/\^t\b/g,"").replace(/\bpi\b/g,"pi");
- return s;
-}
-function matrixFromExpr(expr,scope){
- let s=normalizeExpr(expr);
- // Rotation helpers: Rz(angle), Ry(angle), Rx(angle)
- const m=s.match(/^R([xyz])\((.*)\)$/i);
- if(m){
-   const a=math.evaluate(m[2],scope||{});
-   const c=Math.cos(a),q=Math.sin(a),z=[[c,-q,0],[q,c,0],[0,0,1]],y=[[c,0,q],[0,1,0],[-q,0,c]],x=[[1,0,0],[0,c,-q],[0,q,c]];
-   const M={x:x,y:y,z:z}[m[1].toLowerCase()];
-   return math.matrix(M);
- }
- const out=math.evaluate(s,scope||{});
- if(!out || typeof out.toArray!=="function") throw Error("행렬로 해석되지 않았습니다.");
- const a=out.toArray();
- if(!Array.isArray(a)||!Array.isArray(a[0])) throw Error("결과가 행렬이 아닙니다.");
- return math.matrix(a);
-}
-function buildMatrices(){
- const els=[...document.querySelectorAll(".transform")],scope={};
- const mats=[];
- for(let i=0;i<els.length;i++){
-   const expr=els[i].querySelector(".texpr").value;
-   if(!expr.trim()) throw Error(`A${i+1}: 입력이 비어 있습니다.`);
-   try{mats.push(matrixFromExpr(expr,scope));scope["A"+(i+1)]=mats[i];}
-   catch(e){throw Error(`A${i+1}: ${e.message}`)}
- }
- return {mats,scope};
-}
-function previewTransforms(){
- try{
-   const {mats}=buildMatrices();
-   document.querySelectorAll(".transform").forEach((el,i)=>{
-     const a=mats[i].toArray();
-     el.querySelector(".preview").innerHTML=`<div class="help success">유효한 ${a.length} x ${a[0].length} 행렬</div>`;
-   });
-   $("transformError").innerHTML="";
- }catch(e){$("transformError").innerHTML=`<div class="error">${e.message}</div>`}
-}
-function parseRange(s,name){
- const m=s.trim().match(/^\s*(-?[\d.]+)\s*\.\.\s*(-?[\d.]+)\s*$/);
- if(!m)throw Error(`${name} 범위는 -2..2 형식으로 입력하세요.`);
- return [+m[1],+m[2]];
-}
-function evalExpr(expr,vars){
- try{return +math.evaluate(expr,vars)}catch(e){throw Error(`식 "${expr}"을 계산할 수 없습니다: ${e.message}`)}
-}
-function samplePoints(){
- const type=$("targetType").value,d=+$("dimension").value,pts=[];
- const get=k=>$(k).value;
- if(type==="point"){
-   const v=["x","y","z"].slice(0,d).map(a=>evalExpr(get("p_"+a),{}));
-   return [v];
- }
- if(type==="curve"){
-   const ex=["x","y","z"].slice(0,d).map(a=>get("c_"+a)),[lo,hi]=parseRange(get("range_t"),"t");
-   for(let i=0;i<=160;i++){const t=lo+(hi-lo)*i/160;const v=ex.map(e=>evalExpr(e,{t}));pts.push(v);}
- }else{
-   const ex=["x","y","z"].slice(0,d).map(a=>get("s_"+a)),[ulo,uhi]=parseRange(get("range_u"),"u"),[vlo,vhi]=parseRange(get("range_v"),"v");
-   for(let i=0;i<=18;i++)for(let j=0;j<=18;j++){const u=ulo+(uhi-ulo)*i/18,v=vlo+(vhi-vlo)*j/18;pts.push(ex.map(e=>evalExpr(e,{u,v})));}
- }
- return pts;
-}
-function to3(v){return [v[0]||0,v[1]||0,v[2]||0]}
-function apply(M,v){
- const a=M.toArray(); if(a.length!==a[0].length)throw Error("변환 행렬은 정사각행렬이어야 합니다.");
- if(a.length!==v.length)throw Error(`차원 불일치: ${a.length} x ${a[0].length} 행렬에 ${v.length}차원 벡터를 적용할 수 없습니다.`);
- return math.multiply(M,math.matrix(v)).toArray();
-}
-function clearObjects(){
-  if(!objectGroup) throw Error("3D 화면이 초기화되지 않았습니다. 페이지를 새로고침한 뒤 다시 실행하세요.");
-  while(objectGroup.children.length)objectGroup.remove(objectGroup.children[0]);
-}
-function makeLine(points,material){
- const geo=new THREE.BufferGeometry().setFromPoints(points.map(to3).map(v=>new THREE.Vector3(...v)));
- return new THREE.Line(geo,material);
-}
-function draw(points,kind,material,offset=0){
- if(kind==="point"){
-   const g=new THREE.SphereGeometry(.09,16,16),m=new THREE.MeshBasicMaterial(material),o=new THREE.Mesh(g,m);o.position.set(...to3(points[0]));objectGroup.add(o);return;
- }
- if(kind==="curve"){objectGroup.add(makeLine(points,material));return}
- // Surface: show a point cloud to keep implementation robust for arbitrary parameterizations.
- const geo=new THREE.BufferGeometry().setFromPoints(points.map(v=>new THREE.Vector3(...to3(v))));
- const mat=new THREE.PointsMaterial({size:.045,...material});objectGroup.add(new THREE.Points(geo,mat));
-}
-function fmtMatrix(M){
- return JSON.stringify(M.toArray(),null,2).replace(/],/g,"],\n");
-}
-function analyze(mats,composite,pts){
- let ortho=true,det=null;
- const arr=composite.toArray(),n=arr.length;
- try{det=math.det(composite);const gram=math.multiply(math.transpose(composite),composite).toArray();
-   for(let i=0;i<n;i++)for(let j=0;j<n;j++){const expected=i===j?1:0;if(Math.abs(gram[i][j]-expected)>1e-8)ortho=false;}
- }catch{}
- $("orthogonal").innerHTML=ortho?`<span class="success">✓ 직교행렬</span><br>det(A) = ${det?.toFixed(6)}`:`<span>✗ 직교행렬이 아님</span><br>det(A) = ${det==null?"계산 불가":det.toFixed(6)}`;
- $("composite").innerHTML=`<pre>${fmtMatrix(composite)}</pre>`;
- $("steps").innerHTML=mats.map((m,i)=>`A${i+1}: ${m.size()[0]} x ${m.size()[1]}`).join("<br>");
- if(pts.length){
-   const p0=pts[0],p1=apply(composite,p0);
-   const l0=Math.sqrt(p0.reduce((s,x)=>s+x*x,0)),l1=Math.sqrt(p1.reduce((s,x)=>s+x*x,0));
-   $("preserve").innerHTML=`첫 벡터 길이: ${l0.toFixed(6)} → ${l1.toFixed(6)}<br>길이 보존: ${Math.abs(l0-l1)<1e-7?"✓":"✗"}`;
- }
-}
-function render(){
- clearObjects();
- const type=$("targetType").value;
- let pts=samplePoints(),{mats,scope}=buildMatrices();
- const d=+$("dimension").value;
- let composite=math.identity(d);
- // Input A1, A2... and application A3*A2*A1*v.
- for(const M of mats){
-   if(M.size()[0]!==d||M.size()[1]!==d)throw Error(`A${mats.indexOf(M)+1}: ${d}D 대상에는 ${d} x ${d} 행렬이 필요합니다.`);
-   composite=math.multiply(M,composite);
- }
- const out=pts.map(v=>apply(composite,v));
- const material={color:0x315efb};
- draw(pts,type,material);draw(out,type,{color:0xd14b3f});
- if(type==="point"){
-   const line=makeLine([pts[0],out[0]],new THREE.LineBasicMaterial({color:0x555555}));objectGroup.add(line);
- }
- analyze(mats,composite,pts);
- $("viewInfo").textContent=`파랑: 원본 · 빨강: 변환 결과 · ${pts.length}개 샘플`;
-}
-$("run").onclick=()=>{
- try{$("targetError").innerHTML="";$("transformError").innerHTML="";render();}
- catch(e){$("targetError").innerHTML=`<div class="error">변환 실행 오류: ${e.message}</div>`;}
-};
-$("reset").onclick=()=>{location.reload()};
-init3D();
-</script>
 </body>
 </html>
