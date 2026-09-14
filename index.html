@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/mathjs@14.0.1/lib/browser/math.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.180.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/examples/js/controls/OrbitControls.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css">
 <style>
@@ -233,7 +233,10 @@ function apply(M,v){
  if(a.length!==v.length)throw Error(`차원 불일치: ${a.length} x ${a[0].length} 행렬에 ${v.length}차원 벡터를 적용할 수 없습니다.`);
  return math.multiply(M,math.matrix(v)).toArray();
 }
-function clearObjects(){while(objectGroup.children.length)objectGroup.remove(objectGroup.children[0])}
+function clearObjects(){
+  if(!objectGroup) throw Error("3D 화면이 초기화되지 않았습니다. 페이지를 새로고침한 뒤 다시 실행하세요.");
+  while(objectGroup.children.length)objectGroup.remove(objectGroup.children[0]);
+}
 function makeLine(points,material){
  const geo=new THREE.BufferGeometry().setFromPoints(points.map(to3).map(v=>new THREE.Vector3(...v)));
  return new THREE.Line(geo,material);
