@@ -44,6 +44,12 @@ button.danger{background:#fee4e2;color:#b42318}
 .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .result-box{border:1px solid var(--line);border-radius:9px;padding:9px;font-size:12px;line-height:1.55}
 .result-box pre{white-space:pre-wrap;font:11px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;margin:6px 0 0}
+.matrix-wrap{display:flex;align-items:center;gap:5px;margin-top:8px}
+.matrix-bracket{font-family:Georgia,serif;font-size:42px;line-height:1;font-weight:400;color:#333}
+.matrix-table{border-collapse:collapse;font-family:"Times New Roman",Georgia,serif;font-size:17px}
+.matrix-table td{padding:2px 9px;text-align:center;min-width:26px}
+.matrix-caption{font-size:11px;color:var(--muted);margin-top:4px}
+
 details summary{cursor:pointer;font-size:12px;font-weight:800}
 .syntax{font-size:11px;line-height:1.7;margin-top:8px}
 .canvas-note{position:absolute;right:12px;bottom:12px;font-size:10px;color:#6b7280;background:rgba(255,255,255,.85);padding:5px 7px;border-radius:6px}
@@ -590,6 +596,19 @@ function apply(M,v){
   return M.map(row=>row.reduce((s,a,j)=>s+a*v[j],0));
 }
 
+function matrixHtml(M){
+  const rows=M.map(row=>`<tr>${row.map(v=>`<td>${formatNumber(v)}</td>`).join("")}</tr>`).join("");
+  return `<div class="matrix-wrap">
+    <span class="matrix-bracket">(</span>
+    <table class="matrix-table">${rows}</table>
+    <span class="matrix-bracket">)</span>
+  </div>`;
+}
+function formatNumber(v){
+  const n=Math.abs(v)<1e-10?0:v;
+  if(Number.isInteger(n)) return String(n);
+  return Number(n.toFixed(6)).toString();
+}
 function analyze(matrices,comp,pts,out){
   const d=comp.length;
   const AT=transpose(comp),ATA=multiply(AT,comp);
@@ -598,15 +617,17 @@ function analyze(matrices,comp,pts,out){
   const determinant=det(comp);
   let invStatus="계산 불가";
   try{inv(comp);invStatus="가능";}catch{}
-  $("composite").innerHTML=`<pre>${esc(JSON.stringify(comp,null,2))}</pre>`;
+  $("composite").innerHTML=`${matrixHtml(comp)}<div class="matrix-caption">A = A${matrices.length} ... A2 * A1</div>`;
   $("orthogonal").innerHTML=`
     <b>${orth?"✓ 직교행렬":"✗ 직교행렬이 아님"}</b><br>
     det(A) = ${determinant.toFixed(6)}<br>
     A^T*A = ${orth?"I":"I 아님"}<br>
     A^-1 존재: ${invStatus}
   `;
-  $("steps").innerHTML=matrices.map((M,i)=>`A${i+1}: ${M.length} x ${M[0].length}`).join("<br>")+
-    `<br>최종 적용: A${matrices.length}...A2*A1*v`;
+  $("steps").innerHTML=matrices.map((M,i)=>
+    `<div style="margin-bottom:6px"><b>A${i+1}</b>${matrixHtml(M)}</div>`
+  ).join("")+
+    `<div style="margin-top:6px"><b>최종 적용:</b> A${matrices.length} * ... * A2 * A1 * v</div>`;
   if(pts.length){
     const a=pts[0],b=out[0],la=Math.hypot(...a),lb=Math.hypot(...b);
     $("preserve").innerHTML=`첫 벡터 길이: ${la.toFixed(6)} → ${lb.toFixed(6)}<br>길이 보존: ${Math.abs(la-lb)<1e-8?"✓":"✗"}<br>길이 비율: ${la<1e-12?"정의 안 됨":(lb/la).toFixed(6)}`;
